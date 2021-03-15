@@ -1,0 +1,91 @@
+//Eduardo Ferreira de Oliveira
+
+package problema;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
+
+public class Problema {
+
+	public static void main(String[] args) {
+		
+
+			//A estrutura try-catch é usada pois o objeto BufferedWriter exige que as
+			//excessões sejam tratadas
+			try {
+
+				//Criação de um buffer para a ler de uma stream
+				BufferedReader StrR = new BufferedReader(new FileReader("c:\\tabela.csv"));
+				DecimalFormat formatador = new DecimalFormat("0.00");
+				
+				//Criação de arquivo .txt
+				FileWriter arq = new FileWriter("d:\\EduardoFerreiraDeOliveira.txt");
+			    PrintWriter gravarArq = new PrintWriter(arq);
+				
+			    // Declaração de string de controle e array
+				String Str;
+				String[] TableLine;
+	
+				//Auxiliar na quebra da primeira linha
+				boolean primeiraLinha = true;
+				
+				//Essa estrutura do looping while é clássica para ler cada linha
+				//do arquivo
+				while((Str = StrR.readLine())!= null){
+				
+				
+				// Pula primeira linha	
+					if(primeiraLinha) {
+						primeiraLinha = false;
+						continue;
+					}
+									
+				//Aqui usamos o método split que divide a linha lida em um array de String
+				//passando como parametro o divisor ";".
+				TableLine = Str.replaceAll(",", ".").split(";");
+				
+					//Verificação de posição vazia
+					if(TableLine.length >= 3) {
+					
+					//Transformação de String em double.
+					
+						double c = Double.parseDouble(TableLine[2]);
+						double d = Double.parseDouble(TableLine[3]);
+					
+					//Cálculo
+						double imc =  c/(d*d);
+									
+					//Impressão	console
+						System.out.print(TableLine[0].toUpperCase().replaceAll(" ", "")+" "+TableLine[1].toUpperCase()+" " + formatador.format(imc) +"\n");
+						
+					//Gravação de arquivos em .txt
+						gravarArq.printf(TableLine[0].toUpperCase().replaceAll(" ", "")+" "+TableLine[1].toUpperCase()+" " + formatador.format(imc) +"\n");
+						
+					}
+				// Exceção para posições vazias
+				else {
+					System.out.println("Valores nulos");
+					
+				}
+				
+				}
+				
+				//Finalizando arquivo
+				arq.close();
+				
+				//Fechamos o buffer
+				StrR.close();
+			} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			} catch (IOException ex){
+			ex.printStackTrace();
+			}
+
+	}
+
+}
